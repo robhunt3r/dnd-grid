@@ -51,20 +51,17 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
     if (doBubbleUp) {
         boxLayout = bubbleUp(layout, boxLayout)
     }
-    console.log('up', maxColumnCount, boxLayout.id, boxLayout.position)
-    let currx = boxLayout.position.x // = 0 // to start computing on x=0
+    // boxLayout.position.x = 0 // to start computing on x=0
     // boxLayout.position.y = 0 // to start computing on y=0
+    let currx = boxLayout.position.x
     let maxx  = 0
     if(isFinite(maxColumnCount)) {
         if(boxLayout.position.w > maxColumnCount) {
-            console.log('moveBoxToFreePlace: box is wider than dashboard', boxLayout, maxColumnCount)
-            //to fix box size, uncomment next line
-            //boxLayout.position.w = maxColumnCount
+            console.warn('Container::moveBoxToFreePlace: box is wider than dashboard. setting box.w to maxColumnCount', boxLayout, maxColumnCount)
+            boxLayout.position.w = maxColumnCount
         } else {
             maxx  = maxColumnCount - boxLayout.position.w
         }
-    } else { // let make maxColumnCount very large. Should fit pixelsized ultra-hyper-hd screen.
-        maxx = 99999
     }
     let found = isFree(layout, boxLayout.position)
     while (!found) {
@@ -73,7 +70,6 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
                 x: boxLayout.position.x + 1
             })
             found = isFree(layout, boxLayout.position)
-            console.log('x+1', boxLayout.position)
         }
         if(!found) {
             // next line
@@ -82,7 +78,6 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
                 y: boxLayout.position.y + 1
             })
             found = isFree(layout, boxLayout.position)
-            console.log('y+1', boxLayout.position)
         }
     }
     return boxLayout
