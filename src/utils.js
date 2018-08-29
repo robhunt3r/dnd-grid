@@ -47,14 +47,43 @@ export const bubbleUp = (layout, boxLayout) => {
 }
 
 // updates box position to a free place in a given layout
-export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp) => {
+export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount) => {
     if (doBubbleUp) {
         boxLayout = bubbleUp(layout, boxLayout)
     }
-    while (!isFree(layout, boxLayout.position)) {
-        boxLayout = updateBoxPosition(boxLayout, {
-            y: boxLayout.position.y + 1
-        })
+    console.log('up', maxColumnCount, boxLayout.id, boxLayout.position)
+    let currx = boxLayout.position.x // = 0 // to start computing on x=0
+    // boxLayout.position.y = 0 // to start computing on y=0
+    let maxx  = 0
+    if(isFinite(maxColumnCount)) {
+        if(boxLayout.position.w > maxColumnCount) {
+            console.log('moveBoxToFreePlace: box is wider than dashboard', boxLayout, maxColumnCount)
+            //to fix box size, uncomment next line
+            //boxLayout.position.w = maxColumnCount
+        } else {
+            maxx  = maxColumnCount - boxLayout.position.w
+        }
+    } else { // let make maxColumnCount very large. Should fit pixelsized ultra-hyper-hd screen.
+        maxx = 99999
+    }
+    let found = isFree(layout, boxLayout.position)
+    while (!found) {
+        while(!found && (boxLayout.position.x < maxx || !isFinite(maxColumnCount))) {
+            boxLayout = updateBoxPosition(boxLayout, {
+                x: boxLayout.position.x + 1
+            })
+            found = isFree(layout, boxLayout.position)
+            console.log('x+1', boxLayout.position)
+        }
+        if(!found) {
+            // next line
+            boxLayout = updateBoxPosition(boxLayout, {
+                x: currx,
+                y: boxLayout.position.y + 1
+            })
+            found = isFree(layout, boxLayout.position)
+            console.log('y+1', boxLayout.position)
+        }
     }
     return boxLayout
 }
@@ -149,11 +178,11 @@ export const layoutHasCollisions = (layout) => {
 }
 
 // fix layout with collisions
-export const fixLayout = (layout, doBubbleUp) => {
+export const fixLayout = (layout, doBubbleUp, maxColumnCount) => {
     layout = sortLayout(layout)
     let fixedLayout = []
     layout.forEach(boxLayout => {
-        fixedLayout.push(moveBoxToFreePlace(fixedLayout, boxLayout, doBubbleUp))
+        fixedLayout.push(moveBoxToFreePlace(fixedLayout, boxLayout, doBubbleUp, maxColumnCount))
     })
     return fixedLayout
 }

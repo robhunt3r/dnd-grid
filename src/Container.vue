@@ -98,7 +98,7 @@
             layout (newLayout) {
                 if (this.fixLayoutOnLoad) {
                     if (utils.layoutHasCollisions(newLayout)) {
-                        this.updateLayout(utils.fixLayout(newLayout, this.bubbleUp))
+                        this.updateLayout(utils.fixLayout(newLayout, this.bubbleUp, this.maxColumnCount))
                     }
                 }
             }
@@ -286,7 +286,7 @@
                         if (boxLayout.id === this.dragging.boxLayout.id) {
                             return
                         }
-                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxLayout, this.bubbleUp))
+                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxLayout, this.bubbleUp, this.maxColumnCount))
                     })
 
                     if (this.bubbleUp) {
@@ -331,7 +331,7 @@
                         if (boxPosition.id === this.dragging.boxLayout.id) {
                             return
                         }
-                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxPosition, this.bubbleUp))
+                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxPosition, this.bubbleUp, this.maxColumnCount))
                     })
 
                     if (this.bubbleUp) {
@@ -428,7 +428,7 @@
                         if (boxLayout.id === this.resizing.boxLayout.id) {
                             return
                         }
-                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxLayout, this.bubbleUp))
+                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxLayout, this.bubbleUp, this.maxColumnCount))
                     })
 
                     if (this.bubbleUp) {
@@ -473,7 +473,7 @@
                         if (boxPosition.id === this.resizing.boxLayout.id) {
                             return
                         }
-                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxPosition, this.bubbleUp))
+                        newLayout.push(utils.moveBoxToFreePlace(newLayout, boxPosition, this.bubbleUp, this.maxColumnCount))
                     })
 
                     if (this.bubbleUp) {
@@ -506,7 +506,7 @@
                                 y: 0,
                                 ...this.defaultSize
                             }
-                        }, this.bubbleUp))
+                        }, this.bubbleUp, this.maxColumnCount))
                     })
                     this.updateLayout(newLayout)
                 }
