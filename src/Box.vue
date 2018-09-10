@@ -52,6 +52,42 @@
             dragSelector: {
                 type: String,
                 default: '*'
+            },
+            x: {
+              type: Number,
+              default: function() { // placed automagically
+                return 0
+              }
+            },
+            y: {
+              type: Number,
+              default: function() { // placed automagically
+                return 0
+              }
+            },
+            h: {
+              type: Number,
+              default: function() { // Multiplier for virtual grid height
+                return 1
+              }
+            },
+            w: {
+              type: Number,
+              default: function() { // Multiplier for virtual grid width
+                return 1
+              }
+            },
+            pinned: {
+              type: Boolean,
+              default: function() { // placed automagically
+                return false
+              }
+            },
+            hidden: {
+              type: Boolean,
+              default: function() { // placed automagically
+                return false
+              }
             }
         },
         data () {
