@@ -54,6 +54,7 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
     // boxLayout.position.x = 0 // to start computing on x=0
     // boxLayout.position.y = 0 // to start computing on y=0
     let currx = boxLayout.position.x
+    let curry = boxLayout.position.y
     let maxx  = 0
     if(isFinite(maxColumnCount)) {
         if(boxLayout.position.w > maxColumnCount) {
@@ -64,18 +65,28 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
         }
     }
     let found = isFree(layout, boxLayout.position)
+    let ymove = -1 // we will first try to move the box up until y=0 and then go down
     while (!found) {
-        while(!found && (boxLayout.position.x < maxx || !isFinite(maxColumnCount))) {
+        while(!found && (boxLayout.position.x > 0 || !isFinite(maxColumnCount))) { // we first try to slide the box left
+            boxLayout = updateBoxPosition(boxLayout, {
+                x: boxLayout.position.x - 1
+            })
+            found = isFree(layout, boxLayout.position)
+        }
+        while(!found && (boxLayout.position.x < maxx || !isFinite(maxColumnCount))) { // then right
             boxLayout = updateBoxPosition(boxLayout, {
                 x: boxLayout.position.x + 1
             })
             found = isFree(layout, boxLayout.position)
         }
-        if(!found) {
-            // next line
+        if(!found) { // other line to try
+            if(boxLayout.position.y == 0) {
+                boxLayout.position.y = curry
+                ymove = 1
+            }
             boxLayout = updateBoxPosition(boxLayout, {
                 x: currx,
-                y: boxLayout.position.y + 1
+                y: boxLayout.position.y + ymove
             })
             found = isFree(layout, boxLayout.position)
         }

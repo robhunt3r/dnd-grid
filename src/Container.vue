@@ -132,20 +132,33 @@
             }
         },
         computed: {
-            style () {
+            style () { // either use maxColumnCount/maxRowCount or try to stick around existing layout or 100%
                 var layoutSize = utils.getLayoutSize(this.layout)
-                return {
-                    minWidth: (
-                        (layoutSize.w * this.cellSize.w) +
-                        ((layoutSize.w - 1) * this.margin) +
-                        (2 * this.outerMargin)
-                    ) + 'px',
-                    minHeight: (
-                        (layoutSize.h * this.cellSize.h) +
-                        ((layoutSize.h - 1) * this.margin) +
-                        (2 * this.outerMargin)
-                    ) + 'px'
+                let w = 0, h = 0
+
+                if(isFinite(this.maxColumnCount)) {
+                  w = this.maxColumnCount * this.cellSize.w +
+                      (this.maxColumnCount - 1) * this.margin + 2 * this.outerMargin + 'px'
+                } else if(layoutSize.w > 0) {
+                  w = layoutSize.w * this.cellSize.w +
+                        (layoutSize.w - 1) * this.margin + 2 * this.outerMargin + 'px'
+                } else {
+                  w = '100%'
                 }
+
+                if(isFinite(this.maxRowCount)) {
+                  h = this.maxRowCount * this.cellSize.h +
+                      (this.maxRowCount - 1) * this.margin + 2 * this.outerMargin + 'px'
+                } else if(layoutSize.h > 0) {
+                  h = layoutSize.h * this.cellSize.h +
+                      (layoutSize.h - 1) * this.margin +  2 * this.outerMargin + 'px'
+                } else {
+                  h = '100%'
+                }
+
+                let ret = { minWidth: w, minHeight: h }
+                console.log('dnd-grid-container::computed::style', ret, layoutSize, this.layout)
+                return ret
             },
             pinnedLayout () {
                 return this.layout.filter((boxLayout) => {
@@ -199,6 +212,19 @@
                 this.$emit('update:layout', layout)
             },
             registerBox (box) {
+                let boxLayout = utils.moveBoxToFreePlace(this.layout, {
+                  id: box.$props.boxId,
+                  hidden: box.$props.hidden,
+                  pinned: box.$props.pinned,
+                  position: {
+                    x: box.$props.x,
+                    y: box.$props.y,
+                    w: box.$props.w,
+                    h: box.$props.h
+                  }
+                }, this.bubbleUp, this.maxColumnCount)
+                this.layout.push(boxLayout)
+                console.log('registering', box.$props.boxId, boxLayout.position.w, boxLayout.position.h, boxLayout.position.x, boxLayout.position.y, this.layout)
                 this.enableResizing(box)
                 this.enableDragging(box)
                 if (this.isMounted && this.autoAddLayoutForNewBox) {
