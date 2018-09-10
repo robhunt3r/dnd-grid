@@ -14,6 +14,7 @@
             <dnd-grid-box
                 boxId="settings"
                 dragSelector="div.card-header"
+                :w="4" :h="3"
             >
                 <div class="card demo-box">
                     <div class="card-header">
@@ -51,6 +52,7 @@
                 :boxId="number"
                 :key="number"
                 dragSelector="div.card-header"
+                :w="2" :h="1"
             >
                 <div class="card demo-box">
                     <div class="card-header">
