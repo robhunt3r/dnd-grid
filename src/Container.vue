@@ -224,7 +224,7 @@
                   }
                 }, this.bubbleUp, this.maxColumnCount)
                 this.layout.push(boxLayout)
-                console.log('registering', box.$props.boxId, boxLayout.position.w, boxLayout.position.h, boxLayout.position.x, boxLayout.position.y, this.layout)
+                console.log('Container::registerBox', box.$props.boxId, boxLayout.position.w, boxLayout.position.h, boxLayout.position.x, boxLayout.position.y, this.layout)
                 this.enableResizing(box)
                 this.enableDragging(box)
                 if (this.isMounted && this.autoAddLayoutForNewBox) {

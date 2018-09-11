@@ -51,14 +51,13 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
     if (doBubbleUp) {
         boxLayout = bubbleUp(layout, boxLayout)
     }
-    // boxLayout.position.x = 0 // to start computing on x=0
-    // boxLayout.position.y = 0 // to start computing on y=0
-    let currx = boxLayout.position.x
-    let curry = boxLayout.position.y
+    let currx = boxLayout.position.x // set it to 0 to start computing on x=0
+    let curry = boxLayout.position.y // set it to 0 to start computing on y=0
     let maxx  = 0
     if(isFinite(maxColumnCount)) {
         if(boxLayout.position.w > maxColumnCount) {
-            console.warn('Container::moveBoxToFreePlace: box is wider than dashboard. setting box.w to maxColumnCount', boxLayout, maxColumnCount)
+            let oldw = boxLayout.position.w
+            console.warn('utils::moveBoxToFreePlace: box is wider than dashboard. setting box width to maxColumnCount', boxLayout, oldw, maxColumnCount)
             boxLayout.position.w = maxColumnCount
         } else {
             maxx  = maxColumnCount - boxLayout.position.w
