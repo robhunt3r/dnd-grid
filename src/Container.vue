@@ -217,8 +217,8 @@
                   hidden: box.$props.hidden,
                   pinned: box.$props.pinned,
                   position: {
-                    x: box.$props.x,
-                    y: box.$props.y,
+                    x: box.$props.pinned ? box.$props.x : 0,
+                    y: box.$props.pinned ? box.$props.y : 0,
                     w: box.$props.w,
                     h: box.$props.h
                   }

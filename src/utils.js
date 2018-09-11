@@ -79,9 +79,9 @@ export const moveBoxToFreePlace = (layout, boxLayout, doBubbleUp, maxColumnCount
             found = isFree(layout, boxLayout.position)
         }
         if(!found) { // other line to try
-            if(boxLayout.position.y == 0) {
-                boxLayout.position.y = curry
-                ymove = 1
+            if(boxLayout.position.y == 0) {     // if box is in first row
+                boxLayout.position.y = curry    // we restart from its original position
+                ymove = 1                       // but we move down
             }
             boxLayout = updateBoxPosition(boxLayout, {
                 x: currx,
